@@ -2,8 +2,13 @@
 
 class billing {
 
+  // In €
+  const INSURANCE_FEE = 0.05;
+  // In %
+  const SELECTRA_FEE = 12.5;
+
   private $contracts = array ();
-  private $discounts = array (10, 20, 25);
+  private $discounts = array (0.9, 0.8, 0.75);
   private $level = 0;
   private $providerPrice = 0;
   private $providers = array ();
@@ -27,10 +32,23 @@ class billing {
       $contract = $this->getContract ($user['id']);
       $price = $this->getProviderPrice ($contract['provider_id']);
       $discount = $this->getDiscount ($contract['contract_length']);
+      $price *= $discount;
       $total = $user['yearly_consumption'] * $price;
+
+      $insurance_fee = round ($this->getInsuranceFee ($contract['contract_length']), 2);
+      $provider_fee = round ($total - $insurance_fee, 2);
+      $selectra_fee = round (($provider_fee * self::SELECTRA_FEE) / 100, 2);
+
+      $this->result['bills'][$counter]['commission'] = array (
+        'insurance_fee' => $insurance_fee,
+        'provider_fee' => $provider_fee,
+        'selectra_fee' => $selectra_fee
+        );
+
       $this->result['bills'][$counter]['id'] = $counter;
-      $this->result['bills'][$counter]['price'] = ($total - ($total * $discount) / 100);
+      $this->result['bills'][$counter]['price'] = $total;
       $this->result['bills'][$counter]['user_id'] = $user['id'];
+
       $counter++;
     }
   }
@@ -53,6 +71,10 @@ class billing {
     }
 
     return 0;
+  }
+
+  private function getInsuranceFee ($length) {
+    return ($length * 365 * self::INSURANCE_FEE);
   }
 
   private function getProviderPrice ($providerId) {
