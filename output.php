@@ -2,7 +2,7 @@
 
 require_once ('classes/billing.php');
 
-$billing = new billing (3);
+$billing = new billing (4);
 $billing->calculateBillForUsers ();
 $billing->showResult ();
 

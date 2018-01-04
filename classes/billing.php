@@ -3,6 +3,8 @@
 class billing {
 
   // In €
+  const GREEN_FEE = 0.05;
+  // In €
   const INSURANCE_FEE = 0.05;
   // In %
   const SELECTRA_FEE = 12.5;
@@ -30,10 +32,14 @@ class billing {
     $counter = 1;
     foreach ($this->users as $user) {
       $contract = $this->getContract ($user['id']);
+      $greenFee = 0;
+      if ($contract['green']) {
+        $greenFee = $this->getGreenFee ($user['yearly_consumption']);
+      }
       $price = $this->getProviderPrice ($contract['provider_id']);
       $discount = $this->getDiscount ($contract['contract_length']);
       $price *= $discount;
-      $total = $user['yearly_consumption'] * $price;
+      $total = ($user['yearly_consumption'] * $price) - $greenFee;
 
       $insurance_fee = round ($this->getInsuranceFee ($contract['contract_length']), 2);
       $provider_fee = round ($total - $insurance_fee, 2);
@@ -71,6 +77,10 @@ class billing {
     }
 
     return 0;
+  }
+
+  private function getGreenFee ($length) {
+    return $length * self::GREEN_FEE;
   }
 
   private function getInsuranceFee ($length) {
