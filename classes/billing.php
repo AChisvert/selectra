@@ -3,11 +3,15 @@
 class billing {
 
   private $contracts = array ();
+  private $discounts = array (10, 20, 25);
+  private $level = 0;
+  private $providerPrice = 0;
   private $providers = array ();
   private $result;
   private $users = array ();
 
   function __construct ($level = 1) {
+    $this->level = $level;
     $data = json_decode (file_get_contents ('part1/level' . $level . '/data.json'), true);
     $this->providers = $data['providers'];
     $this->users = $data['users'];
@@ -20,12 +24,35 @@ class billing {
     $this->result['bills'] = array ();
     $counter = 1;
     foreach ($this->users as $user) {
-      $price = $this->getProviderPrice ($user['provider_id']);
+      $contract = $this->getContract ($user['id']);
+      $price = $this->getProviderPrice ($contract['provider_id']);
+      $discount = $this->getDiscount ($contract['contract_length']);
+      $total = $user['yearly_consumption'] * $price;
       $this->result['bills'][$counter]['id'] = $counter;
-      $this->result['bills'][$counter]['price'] = $user['yearly_consumption'] * $price;
+      $this->result['bills'][$counter]['price'] = ($total - ($total * $discount) / 100);
       $this->result['bills'][$counter]['user_id'] = $user['id'];
       $counter++;
     }
+  }
+
+  private function getContract ($userId) {
+    foreach ($this->contracts as $contract) {
+      if ($contract['user_id'] == $userId) {
+        return $contract;
+      }
+    }
+  }
+
+  private function getDiscount ($length) {
+    if ($length <= 1) {
+      return $this->discounts[0];
+    } elseif ($length <= 3) {
+      return $this->discounts[1];
+    } elseif ($length > 3) {
+      return $this->discounts[2];
+    }
+
+    return 0;
   }
 
   private function getProviderPrice ($providerId) {
