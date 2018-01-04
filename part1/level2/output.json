@@ -1,0 +1,19 @@
+{
+  "bills": [
+    {
+      "id": 1,
+      "price": 960,
+      "user_id": 1
+    },
+    {
+      "id": 2,
+      "price": 270,
+      "user_id": 2
+    },
+    {
+      "id": 3,
+      "price": 652.5,
+      "user_id": 3
+    }
+  ]
+}

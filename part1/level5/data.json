@@ -1,0 +1,73 @@
+{
+  "contract_modifications": [
+    {
+      "contract_id": 1,
+      "end_date": "2018-12-25",
+      "id": 1
+    },
+    {
+      "contract_id": 1,
+      "end_date": "2019-12-25",
+      "id": 2,
+      "provider_id": 3,
+      "start_date": "2018-12-25"
+    }
+  ],
+  "contracts": [
+    {
+      "end_date": "2019-12-25",
+      "green": false,
+      "id": 1,
+      "provider_id": 1,
+      "start_date": "2017-12-25",
+      "user_id": 1
+    },
+    {
+      "end_date": "2018-12-25",
+      "green": true,
+      "id": 2,
+      "provider_id": 1,
+      "start_date": "2017-12-25",
+      "user_id": 2
+    },
+    {
+      "end_date": "2018-12-25",
+      "green": false,
+      "id": 3,
+      "provider_id": 2,
+      "start_date": "2017-12-25",
+      "user_id": 3
+    }
+  ],
+  "providers": [
+    {
+      "cancellation_fee": true,
+      "id": 1,
+      "price_per_kwh": 0.15
+    },
+    {
+      "cancellation_fee": true,
+      "id": 2,
+      "price_per_kwh": 0.145
+    },
+    {
+      "cancellation_fee": false,
+      "id": 3,
+      "price_per_kwh": 0.145
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "yearly_consumption": 4000
+    },
+    {
+      "id": 2,
+      "yearly_consumption": 2000
+    },
+    {
+      "id": 3,
+      "yearly_consumption": 5000
+    }
+  ]
+}
